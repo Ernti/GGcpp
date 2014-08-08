@@ -10,6 +10,11 @@ Events::~Events()
     //dtor
 }
 
+void Events::addPlayer(Player* playerin)
+{
+    player = playerin;
+}
+
 void Events::eventLoop()
 {
     while(SDL_PollEvent(&event))
@@ -30,7 +35,9 @@ void Events::eventLoop()
         {
             if(event.button.button == SDL_BUTTON_LEFT)
             {
-
+                float x = event.motion.x;
+                float y = event.motion.y;
+                player->setDestination(x, y);
             }
         }
     }

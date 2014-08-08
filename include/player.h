@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 #include "spaceship.h"
+#include "gamevariables.h"
 
 class Player
 {
@@ -9,9 +10,12 @@ class Player
         Player();
         virtual ~Player();
         Spaceship* getSs();
+        void setDestination(float, float);
     protected:
     private:
         Spaceship* spaceship;
+        float x;
+        float y;
 };
 
 #endif // PLAYER_H

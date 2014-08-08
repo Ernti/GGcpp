@@ -11,6 +11,7 @@ Core::Core()
 
     player = new Player();
     renderer->addPlayer(player);
+    events->addPlayer(player);
 
     GameVariables::running = true;
     //TODO: check for successful initialization

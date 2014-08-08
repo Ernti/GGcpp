@@ -2,8 +2,9 @@
 #define EVENTS_H
 
 #include "SDL.h"
-#include "GameVariables.h"
 #include <iostream>
+#include "gamevariables.h"
+#include "player.h"
 
 class Events
 {
@@ -12,8 +13,10 @@ class Events
         virtual ~Events();
         void eventLoop();
         SDL_Event event;
+        void addPlayer(Player*);
     protected:
     private:
+        Player* player;
 };
 
 #endif // EVENTS_H
