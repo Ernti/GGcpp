@@ -8,6 +8,7 @@
 #include "events.h"
 #include "renderer.h"
 #include "player.h"
+#include "movement.h"
 
 class Core
 {
@@ -20,6 +21,7 @@ class Core
         Events* events;
         Renderer* renderer;
         Player* player;
+        Movement* movement;
 };
 
 #endif // CORE_H

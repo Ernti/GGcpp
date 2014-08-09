@@ -8,8 +8,9 @@ Core::Core()
 
     events = new Events();
     renderer = new Renderer();
+    movement = new Movement();
 
-    player = new Player();
+    player = new Player(movement);
     renderer->addPlayer(player);
     events->addPlayer(player);
 
@@ -30,6 +31,7 @@ void Core::loop()
     while(GameVariables::running)
     {
         events->eventLoop();
+        movement->loop();
         renderer->render();
     }
 }

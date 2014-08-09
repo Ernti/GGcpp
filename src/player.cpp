@@ -1,7 +1,8 @@
 #include "player.h"
 
-Player::Player()
+Player::Player(Movement* movementin)
 {
+    movement = movementin;
     spaceship = new Spaceship(0., 0.);
     x = 0;
     y = 0;
@@ -9,8 +10,9 @@ Player::Player()
 
 Player::~Player()
 {
-    //dtor
+    delete spaceship;
 }
+
 Spaceship* Player::getSs()
 {
     return spaceship;
@@ -18,6 +20,9 @@ Spaceship* Player::getSs()
 
 void Player::setDestination(float xin, float yin)
 {
-    spaceship->setX(x + xin - GameVariables::screenResX / 2);
-    spaceship->setY(y + yin - GameVariables::screenResY / 2);
+    spaceship->setTarget(x + xin - GameVariables::screenResX / 2, y + yin - GameVariables::screenResY / 2);
+
+    std::cout << "adding spaceship" << std::endl;
+    movement->subscribe(std::bind(&spaceship->move, spaceship));
 }
+
