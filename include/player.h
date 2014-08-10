@@ -14,13 +14,24 @@ class Player
         virtual ~Player();
         Spaceship* getSs();
         void setDestination(float, float);
+        float getX();
+        void setX(float);
+        float getY();
+        void setY(float);
+        float getZ();
+        bool locked();
+        void lock();
+        void unlock();
+        int camfollow();
+        void zoom(int);
     protected:
     private:
         Movement* movement;
         Spaceship* spaceship;
         float x;
         float y;
-        void test();
+        float z;
+        bool camlock;
 };
 
 #endif // PLAYER_H

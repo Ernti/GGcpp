@@ -31,25 +31,10 @@ bool Spaceship::move()
 
         target.xrel = target.x - getX();
         target.yrel = target.y - getY();
+        xrel = cos(getR() * 3.14159265 / 180.);
+        yrel = sin(getR() * 3.14159265 / 180.);
 
         turn();
-
-        /*if(target.xrel < xrel && target.yrel < yrel)
-        {
-            turnRight();
-        }
-        else if(target.xrel > xrel && target.yrel > yrel)
-        {
-            turnRight();
-        }
-        else if(target.xrel < xrel && target.yrel > yrel)
-        {
-            turnLeft();
-        }
-        else if(target.xrel > xrel && target.yrel < yrel)
-        {
-            turnLeft();
-        }*/
 
         float xvel = 100. * (cos(getR() * 3.14159265 / 180.));
         float yvel = 100. * (sin(getR() * 3.14159265 / 180.));
@@ -57,7 +42,7 @@ bool Spaceship::move()
         setX(getX() + xvel * ((nowtick - lasttick) / 1000.));
         setY(getY() + yvel * ((nowtick - lasttick) / 1000.));
 
-        std::cout << target.xrel << ", " << target.yrel << std::endl;
+        //std::cout << target.xrel << ", " << target.yrel << std::endl;
 
         lasttick = nowtick;
         return false;
@@ -67,8 +52,11 @@ bool Spaceship::move()
 
 void Spaceship::turn()
 {
-    xrel += target.xrel - xrel;
-    yrel += target.yrel - yrel;
+    xrel = target.xrel;
+    yrel = target.yrel;
+    //xrel += target.xrel - xrel;
+    //yrel += target.yrel - yrel;
+
     setR(atan2(yrel, xrel) * 180 / 3.14159265);
     if(getR() > 180)
     {

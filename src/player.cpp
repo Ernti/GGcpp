@@ -6,6 +6,7 @@ Player::Player(Movement* movementin)
     spaceship = new Spaceship(0., 0.);
     x = 0;
     y = 0;
+    z = 1;
 }
 
 Player::~Player()
@@ -18,11 +19,69 @@ Spaceship* Player::getSs()
     return spaceship;
 }
 
+float Player::getX()
+{
+    return x;
+}
+
+void Player::setX(float xin)
+{
+    x = xin;
+}
+
+float Player::getY()
+{
+    return y;
+}
+
+void Player::setY(float yin)
+{
+    y = yin;
+}
+
+float Player::getZ()
+{
+    return z;
+}
+
+bool Player::locked()
+{
+    return camlock;
+}
+
+void Player::lock()
+{
+    camlock = true;
+    movement->subscribe(std::bind(&camfollow, this));
+}
+
+void Player::unlock()
+{
+    camlock = false;
+}
+
 void Player::setDestination(float xin, float yin)
 {
-    spaceship->setTarget(x + xin - GameVariables::screenResX / 2, y + yin - GameVariables::screenResY / 2);
-
-    std::cout << "adding spaceship" << std::endl;
+    spaceship->setTarget(x + xin, y + yin);
     movement->subscribe(std::bind(&spaceship->move, spaceship));
 }
 
+int Player:: camfollow()
+{
+    setX(spaceship->getX());
+    setY(spaceship->getY());
+    if(locked())
+    {
+        return false;
+    }
+    return true;
+}
+
+void Player::zoom(int zoomfactor)
+{
+    z += zoomfactor;
+    if(z < 1)
+    {
+        z = 1;
+    }
+}

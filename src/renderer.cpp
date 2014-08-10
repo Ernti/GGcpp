@@ -32,10 +32,10 @@ void Renderer::render()
     SDL_Point center;
 
     SDL_Rect posrect;
-    posrect.w = 128;
-    posrect.h = 128;
-    posrect.x = renderable->getX() + screenShiftX - (posrect.w / 2);
-    posrect.y = renderable->getY() + screenShiftY - (posrect.h / 2);
+    posrect.w = 128 / player->getZ();
+    posrect.h = 128 / player->getZ();
+    posrect.x = (renderable->getX() - player->getX()) / player->getZ() + screenShiftX - (posrect.w / 2);
+    posrect.y = (renderable->getY() - player->getY()) / player->getZ() + screenShiftY - (posrect.h / 2);
     center.x = 64;
     center.y = 64;
 
