@@ -78,8 +78,8 @@ void Events::eventLoop()
         {
             if(movecam)
             {
-                float x = player->getX() - event.motion.xrel;
-                float y = player->getY() - event.motion.yrel;
+                float x = player->getX() - event.motion.xrel * player->getZ();
+                float y = player->getY() - event.motion.yrel * player->getZ();
                 player->setX(x);
                 player->setY(y);
             }

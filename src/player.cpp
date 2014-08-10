@@ -62,7 +62,7 @@ void Player::unlock()
 
 void Player::setDestination(float xin, float yin)
 {
-    spaceship->setTarget(x + xin, y + yin);
+    spaceship->setTarget(x + xin * z, y + yin * z);
     movement->subscribe(std::bind(&spaceship->move, spaceship));
 }
 
@@ -79,7 +79,7 @@ int Player:: camfollow()
 
 void Player::zoom(int zoomfactor)
 {
-    z += zoomfactor;
+    z -= zoomfactor;
     if(z < 1)
     {
         z = 1;

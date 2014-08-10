@@ -13,6 +13,10 @@ Core::Core()
     player = new Player(movement);
     renderer->addPlayer(player);
     events->addPlayer(player);
+    renderer->addRenderObject(player->getSs());
+
+    Spaceship* spaceship = new Spaceship(100., 000.);
+    renderer->addRenderObject(spaceship);
 
     GameVariables::running = true;
     //TODO: check for successful initialization

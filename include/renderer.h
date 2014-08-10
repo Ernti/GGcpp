@@ -16,6 +16,7 @@ class Renderer
         virtual ~Renderer();
         void render();
         void addPlayer(Player*);
+        void addRenderObject(Renderable*);
     protected:
     private:
         SDL_Window* window;

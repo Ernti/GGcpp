@@ -21,6 +21,11 @@ void Renderer::addPlayer(Player* playerin)
     player = playerin;
 }
 
+void Renderer::addRenderObject(Renderable* renderable)
+{
+    renderlist.push_back(renderable);
+}
+
 void Renderer::render()
 {
     SDL_SetRenderDrawColor(screen, 0, 0, 0, 255);
@@ -28,6 +33,22 @@ void Renderer::render()
 
     //render stuff
 
+    for(unsigned int it = 0;it<renderlist.size();it++)
+    {
+        Renderable* renderable = renderlist[it];
+        SDL_Point center;
+
+        SDL_Rect posrect;
+        posrect.w = 128 / player->getZ();
+        posrect.h = 128 / player->getZ();
+        posrect.x = (renderable->getX() - player->getX()) / player->getZ() + screenShiftX - (posrect.w / 2);
+        posrect.y = (renderable->getY() - player->getY()) / player->getZ() + screenShiftY - (posrect.h / 2);
+        center.x = 64 / player->getZ();
+        center.y = 64 / player->getZ();
+
+        SDL_RenderCopyEx(screen, texturizer->loadTexture(renderable->getTex()), NULL, &posrect, renderable->getR(), &center, SDL_FLIP_NONE);
+    }
+    /*
     Renderable* renderable = player->getSs();
     SDL_Point center;
 
@@ -40,6 +61,6 @@ void Renderer::render()
     center.y = 64;
 
     SDL_RenderCopyEx(screen, texturizer->loadTexture(renderable->getTex()), NULL, &posrect, renderable->getR(), &center, SDL_FLIP_NONE);
-
+    */
     SDL_RenderPresent(screen);
 }
