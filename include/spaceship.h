@@ -21,6 +21,8 @@ class Spaceship : public Renderable
         Spaceship(float, float);
         virtual ~Spaceship();
         void setTarget(float, float);
+        float getTargetX();
+        float getTargetY();
         bool move();
     protected:
     private:

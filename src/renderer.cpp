@@ -33,6 +33,16 @@ void Renderer::render()
 
     //render stuff
 
+    if(player->getSs()->getTargetX() - player->getSs()->getX() > 1 || player->getSs()->getTargetX() - player->getSs()->getX() < -1
+       || player->getSs()->getTargetY() - player->getSs()->getY() > 1|| player->getSs()->getTargetY() - player->getSs()->getY() < -1)
+    {
+        SDL_SetRenderDrawColor(screen, 0, 255, 0, 255);
+        SDL_RenderDrawLine(screen,
+                           (player->getSs()->getX() - player->getX() / player->getZ() + screenShiftX), (player->getSs()->getY() - player->getY() / player->getZ() + screenShiftY),
+                           (player->getSs()->getTargetX() - player->getX() / player->getZ() + screenShiftX), (player->getSs()->getTargetY() - player->getY() / player->getZ() + screenShiftY));
+        SDL_SetRenderDrawColor(screen, 0, 0, 0, 255);
+    }
+
     for(unsigned int it = 0;it<renderlist.size();it++)
     {
         Renderable* renderable = renderlist[it];

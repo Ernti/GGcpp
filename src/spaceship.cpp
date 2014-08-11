@@ -20,6 +20,16 @@ void Spaceship::setTarget(float xin, float yin)
     lasttick = SDL_GetTicks();
 }
 
+float Spaceship::getTargetX()
+{
+    return target.x;
+}
+
+float Spaceship::getTargetY()
+{
+    return target.y;
+}
+
 bool Spaceship::move()
 {
     //std::cout << xrel << ", " << yrel << std::endl;
