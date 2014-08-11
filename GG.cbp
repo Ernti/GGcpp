@@ -14,7 +14,6 @@
 				<Compiler>
 					<Add option="-g" />
 					<Add directory="include" />
-					<Add directory="C:/Users/tore/Projects/GG/include" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -47,10 +46,24 @@
 			<Add directory="C:/SDL2-2.0.3/x86_64-w64-mingw32/lib" />
 		</Linker>
 		<Unit filename="include/core.h" />
+		<Unit filename="include/events.h" />
+		<Unit filename="include/gamevariables.h" />
+		<Unit filename="include/movement.h" />
+		<Unit filename="include/player.h" />
 		<Unit filename="include/renderable.h" />
+		<Unit filename="include/renderer.h" />
+		<Unit filename="include/spaceship.h" />
+		<Unit filename="include/texturizer.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/core.cpp" />
+		<Unit filename="src/events.cpp" />
+		<Unit filename="src/gamevariables.cpp" />
+		<Unit filename="src/movement.cpp" />
+		<Unit filename="src/player.cpp" />
 		<Unit filename="src/renderable.cpp" />
+		<Unit filename="src/renderer.cpp" />
+		<Unit filename="src/spaceship.cpp" />
+		<Unit filename="src/texturizer.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
