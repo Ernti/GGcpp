@@ -52,7 +52,7 @@ bool Player::locked()
 void Player::lock()
 {
     camlock = true;
-    movement->subscribe(std::bind(&camfollow, this));
+    movement->subscribe(std::bind(&Player::camfollow, this));
 }
 
 void Player::unlock()
@@ -63,7 +63,7 @@ void Player::unlock()
 void Player::setDestination(float xin, float yin)
 {
     spaceship->setTarget(x + xin * z, y + yin * z);
-    movement->subscribe(std::bind(&spaceship->move, spaceship));
+    movement->subscribe(std::bind(&Spaceship::move, spaceship));
 }
 
 int Player:: camfollow()
