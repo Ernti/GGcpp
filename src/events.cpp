@@ -2,7 +2,7 @@
 
 Events::Events()
 {
-    //ctor
+    movecam=false;
 }
 
 Events::~Events()
