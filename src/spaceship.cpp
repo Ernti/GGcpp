@@ -62,29 +62,32 @@ bool Spaceship::move()
     //std::cout << xrel << ", " << yrel << std::endl;
 
     //if(getX()!=target.x || getY()!=target.y)
-    if(target[0].x - getX() > 1 || target[0].x - getX() < -1 || target[0].y - getY() > 1 || target[0].y - getY() < -1)
+    if(target.size() > 0)
     {
-        nowtick = SDL_GetTicks();
+        if(target[0].x - getX() > 1 || target[0].x - getX() < -1 || target[0].y - getY() > 1 || target[0].y - getY() < -1)
+        {
+            nowtick = SDL_GetTicks();
 
-        target[0].xrel = target[0].x - getX();
-        target[0].yrel = target[0].y - getY();
-        xrel = cos(getR() * 3.14159265 / 180.);
-        yrel = sin(getR() * 3.14159265 / 180.);
+            target[0].xrel = target[0].x - getX();
+            target[0].yrel = target[0].y - getY();
+            xrel = cos(getR() * 3.14159265 / 180.);
+            yrel = sin(getR() * 3.14159265 / 180.);
 
-        turn();
+            turn();
 
-        float xvel = 100. * (cos(getR() * 3.14159265 / 180.));
-        float yvel = 100. * (sin(getR() * 3.14159265 / 180.));
+            float xvel = 100. * (cos(getR() * 3.14159265 / 180.));
+            float yvel = 100. * (sin(getR() * 3.14159265 / 180.));
 
-        setX(getX() + xvel * ((nowtick - lasttick) / 1000.));
-        setY(getY() + yvel * ((nowtick - lasttick) / 1000.));
+            setX(getX() + xvel * ((nowtick - lasttick) / 1000.));
+            setY(getY() + yvel * ((nowtick - lasttick) / 1000.));
 
-        //std::cout << target.xrel << ", " << target.yrel << std::endl;
+            //std::cout << target.xrel << ", " << target.yrel << std::endl;
 
-        lasttick = nowtick;
-        return false;
+            lasttick = nowtick;
+            return false;
+        }
+        target.erase(target.begin());
     }
-    target.erase(target.begin());
     return true;
 }
 

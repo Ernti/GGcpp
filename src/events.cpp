@@ -47,7 +47,7 @@ void Events::eventLoop()
         {
             if(event.key.keysym.scancode == SDL_SCANCODE_LSHIFT)
             {
-                shift = true;
+                shift = false;
             }
         }
         else if(event.type == SDL_MOUSEBUTTONDOWN)
