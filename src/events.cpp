@@ -2,7 +2,8 @@
 
 Events::Events()
 {
-    movecam=false;
+    movecam = false;
+    shift = false;
 }
 
 Events::~Events()
@@ -37,10 +38,17 @@ void Events::eventLoop()
                 }
 
             }
+            else if(event.key.keysym.scancode == SDL_SCANCODE_LSHIFT)
+            {
+                shift = true;
+            }
         }
         else if(event.type == SDL_KEYUP)
         {
-
+            if(event.key.keysym.scancode == SDL_SCANCODE_LSHIFT)
+            {
+                shift = true;
+            }
         }
         else if(event.type == SDL_MOUSEBUTTONDOWN)
         {
@@ -48,7 +56,7 @@ void Events::eventLoop()
             {
                 float x = event.motion.x - GameVariables::screenResX / 2;
                 float y = event.motion.y - GameVariables::screenResY / 2;
-                player->setDestination(x, y);
+                player->setDestination(x, y, shift);
                 std::cout << x << ", " << y << std::endl;
                 std::cout << player->getX() << ", " << player->getY() << std::endl;
                 std::cout << player->getSs()->getX() << ", " << player->getSs()->getY() << std::endl;

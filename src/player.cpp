@@ -60,9 +60,16 @@ void Player::unlock()
     camlock = false;
 }
 
-void Player::setDestination(float xin, float yin)
+void Player::setDestination(float xin, float yin, bool shift)
 {
-    spaceship->setTarget(x + xin * z, y + yin * z);
+    if(shift)
+    {
+        spaceship->addTarget(x + xin * z, y + yin * z);
+    }
+    else
+    {
+        spaceship->setTarget(x + xin * z, y + yin * z);
+    }
     movement->subscribe(std::bind(&Spaceship::move, spaceship));
 }
 

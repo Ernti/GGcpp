@@ -13,21 +13,48 @@ Spaceship::~Spaceship()
 
 void Spaceship::setTarget(float xin, float yin)
 {
-    target.x = xin;
-    target.y = yin;
-    target.xrel = target.x - getX();
-    target.yrel = target.y - getY();
+    target.clear();
+    Target t;
+    t.x = xin;
+    t.y = yin;
+    t.xrel = t.x - getX();
+    t.yrel = t.y - getY();
+    target.push_back(t);
     lasttick = SDL_GetTicks();
 }
 
-float Spaceship::getTargetX()
+void Spaceship::addTarget(float xin, float yin)
 {
-    return target.x;
+    Target t;
+    t.x = xin;
+    t.y = yin;
+    t.xrel = t.x - getX();
+    t.yrel = t.y - getY();
+    target.push_back(t);
+    lasttick = SDL_GetTicks();
 }
 
-float Spaceship::getTargetY()
+float Spaceship::getTargetX(int i = 0)
 {
-    return target.y;
+    if(target.size() > 0)
+    {
+        return target[i].x;
+    }
+    return getX();
+}
+
+float Spaceship::getTargetY(int i = 0)
+{
+    if(target.size() > 0)
+    {
+        return target[i].y;
+    }
+    return getY();
+}
+
+unsigned int Spaceship::getTargets()
+{
+    return target.size();
 }
 
 bool Spaceship::move()
@@ -35,12 +62,12 @@ bool Spaceship::move()
     //std::cout << xrel << ", " << yrel << std::endl;
 
     //if(getX()!=target.x || getY()!=target.y)
-    if(target.x - getX() > 1 || target.x - getX() < -1 || target.y - getY() > 1 || target.y - getY() < -1)
+    if(target[0].x - getX() > 1 || target[0].x - getX() < -1 || target[0].y - getY() > 1 || target[0].y - getY() < -1)
     {
         nowtick = SDL_GetTicks();
 
-        target.xrel = target.x - getX();
-        target.yrel = target.y - getY();
+        target[0].xrel = target[0].x - getX();
+        target[0].yrel = target[0].y - getY();
         xrel = cos(getR() * 3.14159265 / 180.);
         yrel = sin(getR() * 3.14159265 / 180.);
 
@@ -57,13 +84,14 @@ bool Spaceship::move()
         lasttick = nowtick;
         return false;
     }
+    target.erase(target.begin());
     return true;
 }
 
 void Spaceship::turn()
 {
-    xrel = target.xrel;
-    yrel = target.yrel;
+    xrel = target[0].xrel;
+    yrel = target[0].yrel;
     //xrel += target.xrel - xrel;
     //yrel += target.yrel - yrel;
 
@@ -85,6 +113,6 @@ void Spaceship::turnRight()
 
 void Spaceship::turnLeft()
 {
-    xrel = target.xrel - xrel / 10;
-    yrel = target.yrel - yrel / 10;
+    xrel = target[0].xrel - xrel / 10;
+    yrel = target[0].yrel - yrel / 10;
 }

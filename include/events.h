@@ -18,6 +18,7 @@ class Events
     private:
         Player* player;
         bool movecam;
+        bool shift;
 };
 
 #endif // EVENTS_H

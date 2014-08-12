@@ -13,7 +13,7 @@ class Player
         Player(Movement*);
         virtual ~Player();
         Spaceship* getSs();
-        void setDestination(float, float);
+        void setDestination(float, float, bool);
         float getX();
         void setX(float);
         float getY();

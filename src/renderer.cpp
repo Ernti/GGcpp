@@ -33,14 +33,22 @@ void Renderer::render()
 
     //render stuff
 
-    if(player->getSs()->getTargetX() - player->getSs()->getX() > 1 || player->getSs()->getTargetX() - player->getSs()->getX() < -1
-       || player->getSs()->getTargetY() - player->getSs()->getY() > 1|| player->getSs()->getTargetY() - player->getSs()->getY() < -1)
+    float lastx = player->getSs()->getX();
+    float lasty = player->getSs()->getY();
+
+    for(unsigned int it = 0;it<player->getSs()->getTargets();it++)
     {
-        SDL_SetRenderDrawColor(screen, 0, 255, 0, 255);
-        SDL_RenderDrawLine(screen,
-                           (player->getSs()->getX() - player->getX() / player->getZ() + screenShiftX), (player->getSs()->getY() - player->getY() / player->getZ() + screenShiftY),
-                           (player->getSs()->getTargetX() - player->getX() / player->getZ() + screenShiftX), (player->getSs()->getTargetY() - player->getY() / player->getZ() + screenShiftY));
-        SDL_SetRenderDrawColor(screen, 0, 0, 0, 255);
+        if(player->getSs()->getTargetX(it) - player->getSs()->getX() > 1 || player->getSs()->getTargetX(it) - player->getSs()->getX() < -1
+           || player->getSs()->getTargetY(it) - player->getSs()->getY() > 1|| player->getSs()->getTargetY(it) - player->getSs()->getY() < -1)
+        {
+            SDL_SetRenderDrawColor(screen, 0, 255, 0, 255);
+            SDL_RenderDrawLine(screen,
+                               ((lastx - player->getX()) / player->getZ() + screenShiftX), ((lasty - player->getY()) / player->getZ() + screenShiftY),
+                               ((player->getSs()->getTargetX(it) - player->getX()) / player->getZ() + screenShiftX), ((player->getSs()->getTargetY(it) - player->getY()) / player->getZ() + screenShiftY));
+            SDL_SetRenderDrawColor(screen, 0, 0, 0, 255);
+            lastx = player->getSs()->getTargetX(it);
+            lasty = player->getSs()->getTargetY(it);
+        }
     }
 
     for(unsigned int it = 0;it<renderlist.size();it++)

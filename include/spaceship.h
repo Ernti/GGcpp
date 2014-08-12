@@ -3,6 +3,7 @@
 
 #include "renderable.h"
 #include <iostream>
+#include <vector>
 #include <math.h>
 #include "SDL.h"
 
@@ -21,12 +22,15 @@ class Spaceship : public Renderable
         Spaceship(float, float);
         virtual ~Spaceship();
         void setTarget(float, float);
-        float getTargetX();
-        float getTargetY();
+        void addTarget(float, float);
+        float getTargetX(int);
+        float getTargetY(int);
+        unsigned int getTargets();
         bool move();
     protected:
     private:
-        Target target;
+        std::vector<Target> target;
+        //Target target;
         Uint32 lasttick;
         Uint32 nowtick;
         void turnRight();
