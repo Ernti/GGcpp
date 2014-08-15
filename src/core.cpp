@@ -24,6 +24,8 @@ Core::Core()
 
 Core::~Core()
 {
+    delete player;
+    delete movement;
     delete renderer;
     delete events;
     IMG_Quit();

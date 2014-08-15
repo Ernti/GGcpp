@@ -30,7 +30,7 @@ class Spaceship : public Renderable
     protected:
     private:
         std::vector<Target> target;
-        std::vector<Item*> inventory;
+        //std::vector<Item*> inventory;
         //Target target;
         Uint32 lasttick;
         Uint32 nowtick;
