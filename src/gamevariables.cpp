@@ -1,4 +1,4 @@
-#include "GameVariables.h"
+#include "gamevariables.h"
 
 bool GameVariables::running = false;
 int GameVariables::screenResX = 1280;
