@@ -4,11 +4,14 @@
 #include <SDL.h>
 #include "SDL_image.h"
 #include <SDL_net.h>
+#include <cstring>
+
 #include "gamevariables.h"
 #include "events.h"
 #include "renderer.h"
 #include "player.h"
 #include "movement.h"
+#include "network.h"
 
 class Core
 {
@@ -22,6 +25,7 @@ class Core
         Renderer* renderer;
         Player* player;
         Movement* movement;
+        Network* network;
 };
 
 #endif // CORE_H

@@ -1,7 +1,9 @@
 #include "events.h"
 
-Events::Events()
+Events::Events(std::vector<Packet*> * bl, std::vector<Packet*> * rl)
 {
+    broadcastlist = bl;
+    receiverlist = rl;
     movecam = false;
     shift = false;
 }

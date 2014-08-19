@@ -6,11 +6,14 @@ Core::Core()
     IMG_Init(IMG_INIT_PNG);
     SDLNet_Init();
 
-    events = new Events();
+    Packet * packet = new Packet();
+    network = new Network(packet);
+
+    events = new Events(&network->broadcastlist, &network->receivelist);
     renderer = new Renderer();
     movement = new Movement();
 
-    player = new Player(movement);
+    player = new Player(movement, packet, &network->broadcastlist);
     renderer->addPlayer(player);
     events->addPlayer(player);
     renderer->addRenderObject(player->getSs());
@@ -18,12 +21,15 @@ Core::Core()
     Spaceship* spaceship = new Spaceship(100., 000.);
     renderer->addRenderObject(spaceship);
 
+    //delete packet;
+
     GameVariables::running = true;
     //TODO: check for successful initialization
 }
 
 Core::~Core()
 {
+    delete network;
     delete player;
     delete movement;
     delete renderer;
@@ -36,6 +42,10 @@ void Core::loop()
 {
     while(GameVariables::running)
     {
+        if(network->running)
+        {
+            network->loop();
+        }
         events->eventLoop();
         movement->loop();
         renderer->render();

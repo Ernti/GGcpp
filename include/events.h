@@ -9,7 +9,7 @@
 class Events
 {
     public:
-        Events();
+        Events(std::vector<Packet*>*, std::vector<Packet*>*);
         virtual ~Events();
         void eventLoop();
         SDL_Event event;
@@ -19,6 +19,8 @@ class Events
         Player* player;
         bool movecam;
         bool shift;
+        std::vector<Packet*>* broadcastlist;
+        std::vector<Packet*>* receiverlist;
 };
 
 #endif // EVENTS_H

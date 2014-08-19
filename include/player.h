@@ -5,12 +5,13 @@
 #include "spaceship.h"
 #include "gamevariables.h"
 #include "movement.h"
+#include "packet.h"
 #include <functional>
 
 class Player
 {
     public:
-        Player(Movement*);
+        Player(Movement*, Packet*, std::vector<Packet*>*);
         virtual ~Player();
         Spaceship* getSs();
         void setDestination(float, float, bool);
@@ -28,6 +29,8 @@ class Player
     private:
         Movement* movement;
         Spaceship* spaceship;
+        std::vector<Packet*>* broadcastlist;
+        int id;
         float x;
         float y;
         float z;

@@ -1,11 +1,13 @@
 #include "player.h"
 
-Player::Player(Movement* movementin)
+Player::Player(Movement* movementin, Packet * startPacket, std::vector<Packet*> * bl)
 {
     movement = movementin;
-    spaceship = new Spaceship(0., 0.);
-    x = 0;
-    y = 0;
+    broadcastlist = bl;
+    id = startPacket->id;
+    spaceship = new Spaceship(startPacket->x, startPacket->y);
+    x = startPacket->x;
+    y = startPacket->y;
     z = 1;
 }
 
@@ -70,6 +72,11 @@ void Player::setDestination(float xin, float yin, bool shift)
     {
         spaceship->setTarget(x + xin * z, y + yin * z);
     }
+    Packet * packet = new Packet();
+    packet->id = id;
+    packet->x = int(x + xin * z);
+    packet->y = int(y + yin * z);
+    broadcastlist->push_back(packet);
     movement->subscribe(std::bind(&Spaceship::move, spaceship));
 }
 
