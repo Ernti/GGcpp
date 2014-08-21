@@ -19,23 +19,24 @@ struct Target
 class Spaceship : public Renderable
 {
     public:
-        Spaceship(float, float);
+        Spaceship(float, float, unsigned int);
         virtual ~Spaceship();
+        unsigned int getId();
+        void setId(unsigned int);
         void setTarget(float, float);
-        void addTarget(float, float);
-        float getTargetX(int);
-        float getTargetY(int);
-        unsigned int getTargets();
+        float getTargetX(int = 0);
+        float getTargetY(int = 0);
         bool move();
+        bool getMoving();
     protected:
     private:
-        std::vector<Target> target;
+        unsigned int id;
+        bool moving;
+        Target target;
         //std::vector<Item*> inventory;
         //Target target;
         Uint32 lasttick;
         Uint32 nowtick;
-        void turnRight();
-        void turnLeft();
         void turn();
         float xrel;
         float yrel;

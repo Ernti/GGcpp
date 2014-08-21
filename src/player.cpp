@@ -1,11 +1,10 @@
 #include "player.h"
 
-Player::Player(Movement* movementin, Packet * startPacket, std::vector<Packet*> * bl)
+Player::Player(Movement* movementin, Packet * startPacket)
 {
     movement = movementin;
-    broadcastlist = bl;
     id = startPacket->id;
-    spaceship = new Spaceship(startPacket->x, startPacket->y);
+    spaceship = new Spaceship(startPacket->x, startPacket->y, id);
     x = startPacket->x;
     y = startPacket->y;
     z = 1;
@@ -14,6 +13,11 @@ Player::Player(Movement* movementin, Packet * startPacket, std::vector<Packet*> 
 Player::~Player()
 {
     delete spaceship;
+}
+
+unsigned int Player::getId()
+{
+    return id;
 }
 
 Spaceship* Player::getSs()
@@ -64,20 +68,58 @@ void Player::unlock()
 
 void Player::setDestination(float xin, float yin, bool shift)
 {
-    if(shift)
+    if(!shift)
     {
-        spaceship->addTarget(x + xin * z, y + yin * z);
+        target.clear();
+    }
+    Target t;
+    t.x = xin;
+    t.y = yin;
+    target.push_back(t);
+    movement->subscribe(std::bind(&Player::targeting, this));
+}
+
+bool Player::targeting()
+{
+    if(target.size() > 0)
+    {
+        if(target[0].x - spaceship->getX() > 1 || target[0].x - spaceship->getX() < -1 || target[0].y - spaceship->getY() > 1 || target[0].y - spaceship->getY() < -1)
+        {
+            return true;
+        }
+        else
+        {
+            target.erase(target.begin());
+            return true;
+        }
     }
     else
     {
-        spaceship->setTarget(x + xin * z, y + yin * z);
+        return false;
     }
-    Packet * packet = new Packet();
-    packet->id = id;
-    packet->x = int(x + xin * z);
-    packet->y = int(y + yin * z);
-    broadcastlist->push_back(packet);
-    movement->subscribe(std::bind(&Spaceship::move, spaceship));
+}
+
+float Player::getTargetX(int i)
+{
+    if(target.size() > 0)
+    {
+        return target[i].x;
+    }
+    return spaceship->getX();
+}
+
+float Player::getTargetY(int i)
+{
+    if(target.size() > 0)
+    {
+        return target[i].y;
+    }
+    return spaceship->getY();
+}
+
+unsigned int Player::getTargets()
+{
+    return target.size();
 }
 
 int Player:: camfollow()
@@ -86,9 +128,9 @@ int Player:: camfollow()
     setY(spaceship->getY());
     if(locked())
     {
-        return false;
+        return true;
     }
-    return true;
+    return false;
 }
 
 void Player::zoom(int zoomfactor)

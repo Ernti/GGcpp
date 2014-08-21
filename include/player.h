@@ -11,10 +11,15 @@
 class Player
 {
     public:
-        Player(Movement*, Packet*, std::vector<Packet*>*);
+        Player(Movement*, Packet*);
         virtual ~Player();
+        unsigned int getId();
         Spaceship* getSs();
         void setDestination(float, float, bool);
+        bool targeting();
+        float getTargetX(int = 0);
+        float getTargetY(int = 0);
+        unsigned int getTargets();
         float getX();
         void setX(float);
         float getY();
@@ -29,7 +34,10 @@ class Player
     private:
         Movement* movement;
         Spaceship* spaceship;
-        std::vector<Packet*>* broadcastlist;
+
+
+        std::vector<Target> target;
+        //std::vector<Packet*>* broadcastlist;
         int id;
         float x;
         float y;

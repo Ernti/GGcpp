@@ -2,7 +2,7 @@
 
 Renderer::Renderer()
 {
-    window = SDL_CreateWindow("Project Seven", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, GameVariables::screenResX, GameVariables::screenResY, SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI);
+    window = SDL_CreateWindow("GG", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, GameVariables::screenResX, GameVariables::screenResY, SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI);
     screen = SDL_CreateRenderer( window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
     screenShiftX = GameVariables::screenResX / 2;
@@ -33,21 +33,22 @@ void Renderer::render()
 
     //render stuff
 
+
     float lastx = player->getSs()->getX();
     float lasty = player->getSs()->getY();
 
-    for(unsigned int it = 0;it<player->getSs()->getTargets();it++)
+    for(unsigned int it = 0;it<player->getTargets();it++)
     {
-        if(player->getSs()->getTargetX(it) - player->getSs()->getX() > 1 || player->getSs()->getTargetX(it) - player->getSs()->getX() < -1
-           || player->getSs()->getTargetY(it) - player->getSs()->getY() > 1|| player->getSs()->getTargetY(it) - player->getSs()->getY() < -1)
+        if(player->getTargetX(it) - player->getSs()->getX() > 1 || player->getTargetX(it) - player->getSs()->getX() < -1
+           || player->getTargetY(it) - player->getSs()->getY() > 1|| player->getTargetY(it) - player->getSs()->getY() < -1)
         {
             SDL_SetRenderDrawColor(screen, 0, 255, 0, 255);
             SDL_RenderDrawLine(screen,
                                ((lastx - player->getX()) / player->getZ() + screenShiftX), ((lasty - player->getY()) / player->getZ() + screenShiftY),
-                               ((player->getSs()->getTargetX(it) - player->getX()) / player->getZ() + screenShiftX), ((player->getSs()->getTargetY(it) - player->getY()) / player->getZ() + screenShiftY));
+                               ((player->getTargetX(it) - player->getX()) / player->getZ() + screenShiftX), ((player->getTargetY(it) - player->getY()) / player->getZ() + screenShiftY));
             SDL_SetRenderDrawColor(screen, 0, 0, 0, 255);
-            lastx = player->getSs()->getTargetX(it);
-            lasty = player->getSs()->getTargetY(it);
+            lastx = player->getTargetX(it);
+            lasty = player->getTargetY(it);
         }
     }
 
@@ -80,5 +81,6 @@ void Renderer::render()
 
     SDL_RenderCopyEx(screen, texturizer->loadTexture(renderable->getTex()), NULL, &posrect, renderable->getR(), &center, SDL_FLIP_NONE);
     */
+
     SDL_RenderPresent(screen);
 }

@@ -1,9 +1,13 @@
 #include "spaceship.h"
 
-Spaceship::Spaceship(float x, float y) : Renderable(x, y)
+Spaceship::Spaceship(float x, float y, unsigned int idin) : Renderable(x, y)
 {
+    id = idin;
     xrel = 0;
     xrel = 0;
+    target.x = x;
+    target.y = y;
+    moving = false;
 }
 
 Spaceship::~Spaceship()
@@ -11,50 +15,40 @@ Spaceship::~Spaceship()
     //dtor
 }
 
+unsigned int Spaceship::getId()
+{
+    return id;
+}
+
+void Spaceship::setId(unsigned int i)
+{
+    id = i;
+}
+
 void Spaceship::setTarget(float xin, float yin)
 {
-    target.clear();
     Target t;
     t.x = xin;
     t.y = yin;
     t.xrel = t.x - getX();
     t.yrel = t.y - getY();
-    target.push_back(t);
+    target=t;
     lasttick = SDL_GetTicks();
 }
 
-void Spaceship::addTarget(float xin, float yin)
+float Spaceship::getTargetX(int i)
 {
-    Target t;
-    t.x = xin;
-    t.y = yin;
-    t.xrel = t.x - getX();
-    t.yrel = t.y - getY();
-    target.push_back(t);
-    lasttick = SDL_GetTicks();
+    return target.x;
 }
 
-float Spaceship::getTargetX(int i = 0)
+float Spaceship::getTargetY(int i)
 {
-    if(target.size() > 0)
-    {
-        return target[i].x;
-    }
-    return getX();
+    return target.y;
 }
 
-float Spaceship::getTargetY(int i = 0)
+bool Spaceship::getMoving()
 {
-    if(target.size() > 0)
-    {
-        return target[i].y;
-    }
-    return getY();
-}
-
-unsigned int Spaceship::getTargets()
-{
-    return target.size();
+    return moving;
 }
 
 bool Spaceship::move()
@@ -62,39 +56,37 @@ bool Spaceship::move()
     //std::cout << xrel << ", " << yrel << std::endl;
 
     //if(getX()!=target.x || getY()!=target.y)
-    if(target.size() > 0)
+    if(target.x - getX() > 1 || target.x - getX() < -1 || target.y - getY() > 1 || target.y - getY() < -1)
     {
-        if(target[0].x - getX() > 1 || target[0].x - getX() < -1 || target[0].y - getY() > 1 || target[0].y - getY() < -1)
-        {
-            nowtick = SDL_GetTicks();
+        nowtick = SDL_GetTicks();
 
-            target[0].xrel = target[0].x - getX();
-            target[0].yrel = target[0].y - getY();
-            xrel = cos(getR() * 3.14159265 / 180.);
-            yrel = sin(getR() * 3.14159265 / 180.);
+        target.xrel = target.x - getX();
+        target.yrel = target.y - getY();
+        xrel = cos(getR() * 3.14159265 / 180.);
+        yrel = sin(getR() * 3.14159265 / 180.);
 
-            turn();
+        turn();
 
-            float xvel = 100. * (cos(getR() * 3.14159265 / 180.));
-            float yvel = 100. * (sin(getR() * 3.14159265 / 180.));
+        float xvel = 100. * (cos(getR() * 3.14159265 / 180.));
+        float yvel = 100. * (sin(getR() * 3.14159265 / 180.));
 
-            setX(getX() + xvel * ((nowtick - lasttick) / 1000.));
-            setY(getY() + yvel * ((nowtick - lasttick) / 1000.));
+        setX(getX() + xvel * ((nowtick - lasttick) / 1000.));
+        setY(getY() + yvel * ((nowtick - lasttick) / 1000.));
 
-            //std::cout << target.xrel << ", " << target.yrel << std::endl;
+        //std::cout << target.xrel << ", " << target.yrel << std::endl;
 
-            lasttick = nowtick;
-            return false;
-        }
-        target.erase(target.begin());
+        lasttick = nowtick;
+        moving = true;
+        return moving;
     }
-    return true;
+    moving = false;
+    return moving;
 }
 
 void Spaceship::turn()
 {
-    xrel = target[0].xrel;
-    yrel = target[0].yrel;
+    xrel = target.xrel;
+    yrel = target.yrel;
     //xrel += target.xrel - xrel;
     //yrel += target.yrel - yrel;
 
@@ -107,15 +99,4 @@ void Spaceship::turn()
     {
         setR(getR() + 360);
     }
-}
-
-void Spaceship::turnRight()
-{
-
-}
-
-void Spaceship::turnLeft()
-{
-    xrel = target[0].xrel - xrel / 10;
-    yrel = target[0].yrel - yrel / 10;
 }

@@ -14,6 +14,8 @@ class Packet
         char chat[16];
         int32_t x;
         int32_t y;
+        int32_t targetX;
+        int32_t targetY;
     protected:
     private:
 };

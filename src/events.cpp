@@ -1,9 +1,7 @@
 #include "events.h"
 
-Events::Events(std::vector<Packet*> * bl, std::vector<Packet*> * rl)
+Events::Events()
 {
-    broadcastlist = bl;
-    receiverlist = rl;
     movecam = false;
     shift = false;
 }
@@ -59,9 +57,6 @@ void Events::eventLoop()
                 float x = event.motion.x - GameVariables::screenResX / 2;
                 float y = event.motion.y - GameVariables::screenResY / 2;
                 player->setDestination(x, y, shift);
-                std::cout << x << ", " << y << std::endl;
-                std::cout << player->getX() << ", " << player->getY() << std::endl;
-                std::cout << player->getSs()->getX() << ", " << player->getSs()->getY() << std::endl;
             }
             else if(event.button.button == SDL_BUTTON_LEFT)
             {

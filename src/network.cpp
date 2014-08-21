@@ -46,6 +46,7 @@ Network::Network(Packet * returnPacket)
                     std::cout << "test!" << std::endl;
                     if(strcmp(returnPacket->chat, "connected") == 0)
                     {
+                        id = returnPacket->id;
                         std::cout << "connected!" << std::endl;
                         running = true;
                     }
@@ -93,8 +94,6 @@ void Network::receiver()
         }
         else if(numready)
         {
-            std::cout << "receiver: " << numready << std::endl;
-            std::cout << "SDLNet_CheckSockets: success!" << std::endl;
             if(SDLNet_SocketReady(socket)!=0)
             {
                 int result;
@@ -106,7 +105,6 @@ void Network::receiver()
                 }
                 else
                 {
-                    std::cout << packet->chat << std::endl;
                     receivelist.push_back(packet);
                 }
             }
@@ -129,8 +127,6 @@ void Network::sender()
             Packet * packet = new Packet();
             packet = broadcastlist.front();
 
-            std::cout << packet->chat << std::endl;
-
             result=SDLNet_TCP_Send(socket, packet, sizeof(Packet));
             if(result<sizeof(packet)) {
                 printf("SDLNet_TCP_Send: %s\n", SDLNet_GetError());
@@ -138,15 +134,88 @@ void Network::sender()
             }
             broadcastlist.erase(broadcastlist.begin());
         }
+        std::this_thread::sleep_for (std::chrono::milliseconds(10));
     }
+}
+
+void Network::start(Movement* movementin, Renderer* rendererin, Player* playerin)
+{
+    movement = movementin;
+    renderer = rendererin;
+    player = playerin;
+    spaceschips.push_back(player->getSs());
+    renderer->addRenderObject(player->getSs());
 }
 
 void Network::loop()
 {
     if(Network::running)
     {
+        /*
+        for(unsigned int i = 0;i<spaceschips.size();i++)
+        {
+            bool changes = false;
+            Packet * packet = new Packet();
+            if(subscription[i]->getSs()->getX() != reference[i].getSs()->getX())
+            {
+                packet->x = subscription[i]->getSs()->getX();
+                changes = true;
+            }
+            if(subscription[i]->getSs()->getY() != reference[i].getSs()->getY())
+            {
+                packet->y = subscription[i]->getSs()->getY();
+                changes = true;
+            }
+
+            if(changes)
+            {
+                broadcastlist.push_back(packet);
+                reference[i] = *subscription[i];
+            }
+        }*/
+
+        nowtick = SDL_GetTicks();
+        if(nowtick - lasttick > 100)
+        {
+            Packet* packet = new Packet();
+            std::string tmp = "";
+            strncpy(packet->chat, tmp.c_str(), sizeof(packet->chat));
+            packet->id = player->getSs()->getId();
+            packet->x = player->getSs()->getX();
+            packet->y = player->getSs()->getY();
+            packet->targetX = player->getTargetX();
+            packet->targetY = player->getTargetY();
+            broadcastlist.push_back(packet);
+            lasttick = nowtick;
+        }
+
+
+
         while(!receivelist.empty())
         {
+            bool newship = true;
+            for(unsigned int i = 0;i<spaceschips.size();i++)
+            {
+                if(receivelist.front()->id == spaceschips[i]->getId())
+                {
+                    newship = false;
+                    int xdif = spaceschips[i]->getTargetX() - receivelist.front()->targetX;
+                    int ydif = spaceschips[i]->getTargetY() - receivelist.front()->targetY;
+                    if(xdif > 1 || xdif < -1 || ydif > 1 || ydif < -1)
+                    {
+                        spaceschips[i]->setTarget(receivelist.front()->targetX, receivelist.front()->targetY);
+                        movement->subscribe(std::bind(&Spaceship::move, spaceschips[i]));
+                    }
+                }
+            }
+            if(newship)
+            {
+                Spaceship * spaceship = new Spaceship(receivelist.front()->x, receivelist.front()->y, receivelist.front()->id);
+                spaceship->setTarget(receivelist.front()->targetX, receivelist.front()->targetY);
+                spaceschips.push_back(spaceship);
+                renderer->addRenderObject(spaceship);
+                movement->subscribe(std::bind(&Spaceship::move, spaceship));
+            }
             receivelist.erase(receivelist.begin());
         }
     }

@@ -8,11 +8,13 @@
 #include <chrono>
 #include <thread>
 #include <vector>
-#include "GameVariables.h"
+#include "gamevariables.h"
+#include "player.h"
+#include "movement.h"
+#include "renderer.h"
+#include "packet.h"
 
 using namespace std;
-
-#include "packet.h"
 
 class Network
 {
@@ -20,21 +22,35 @@ class Network
         Network(Packet*);
         virtual ~Network();
 
+        void start(Movement*, Renderer*, Player*);
+
+
+
+        void loop();
+    protected:
+    private:
+        Movement* movement;
+        Renderer* renderer;
+        Player* player;
+
+        SDLNet_SocketSet sockets;
+        TCPsocket socket;
+
         void sender();
         void receiver();
 
         thread receiverthread;
         thread senderthread;
         bool running;
+        Uint32 lasttick;
+        Uint32 nowtick;
 
         std::vector<Packet*> broadcastlist;
         std::vector<Packet*> receivelist;
 
-        void loop();
-    protected:
-    private:
-        SDLNet_SocketSet sockets;
-        TCPsocket socket;
+        std::vector<Spaceship*> spaceschips;
+
+        unsigned int id;
 };
 
 #endif // NETWORK_H

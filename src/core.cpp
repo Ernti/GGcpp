@@ -9,19 +9,18 @@ Core::Core()
     Packet * packet = new Packet();
     network = new Network(packet);
 
-    events = new Events(&network->broadcastlist, &network->receivelist);
+    events = new Events();
     renderer = new Renderer();
     movement = new Movement();
 
-    player = new Player(movement, packet, &network->broadcastlist);
+    player = new Player(movement, packet);
     renderer->addPlayer(player);
     events->addPlayer(player);
-    renderer->addRenderObject(player->getSs());
-
-    Spaceship* spaceship = new Spaceship(100., 000.);
-    renderer->addRenderObject(spaceship);
+    //renderer->addRenderObject(player->getSs());
 
     //delete packet;
+
+    network->start(movement, renderer, player);
 
     GameVariables::running = true;
     //TODO: check for successful initialization
@@ -42,10 +41,7 @@ void Core::loop()
 {
     while(GameVariables::running)
     {
-        if(network->running)
-        {
-            network->loop();
-        }
+        network->loop();
         events->eventLoop();
         movement->loop();
         renderer->render();
