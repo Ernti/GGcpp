@@ -73,8 +73,8 @@ void Player::setDestination(float xin, float yin, bool shift)
         target.clear();
     }
     Target t;
-    t.x = xin;
-    t.y = yin;
+    t.x = x + xin * z;
+    t.y = y + yin * z;
     target.push_back(t);
     movement->subscribe(std::bind(&Player::targeting, this));
 }
