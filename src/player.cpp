@@ -8,6 +8,7 @@ Player::Player(Movement* movementin, Packet * startPacket)
     x = startPacket->x;
     y = startPacket->y;
     z = 1;
+    movement->subscribe(std::bind(&Player::targeting, this));
 }
 
 Player::~Player()
@@ -76,7 +77,6 @@ void Player::setDestination(float xin, float yin, bool shift)
     t.x = x + xin * z;
     t.y = y + yin * z;
     target.push_back(t);
-    movement->subscribe(std::bind(&Player::targeting, this));
 }
 
 bool Player::targeting()
@@ -90,13 +90,9 @@ bool Player::targeting()
         else
         {
             target.erase(target.begin());
-            return true;
         }
     }
-    else
-    {
-        return false;
-    }
+    return true;
 }
 
 float Player::getTargetX(int i)
