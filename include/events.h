@@ -3,6 +3,7 @@
 
 #include "SDL.h"
 #include <iostream>
+#include <string>
 #include "gamevariables.h"
 #include "player.h"
 
@@ -19,6 +20,7 @@ class Events
         Player* player;
         bool movecam;
         bool shift;
+        bool chatActive;
 };
 
 #endif // EVENTS_H

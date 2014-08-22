@@ -5,7 +5,7 @@ Network::Network(Packet * returnPacket)
     IPaddress ip;
     //TCPsocket tcpsock;
 
-    if(SDLNet_ResolveHost(&ip,"localhost",2000)==-1) {
+    if(SDLNet_ResolveHost(&ip,"gg-game.net",2000)==-1) {
         printf("SDLNet_ResolveHost: %s\n", SDLNet_GetError());
         //exit(1);
     }
@@ -17,6 +17,7 @@ Network::Network(Packet * returnPacket)
     }
     else
     {
+        //Login username and password
         sockets=SDLNet_AllocSocketSet(1);
         SDLNet_TCP_AddSocket(sockets,socket);
 
@@ -178,8 +179,7 @@ void Network::loop()
         if(nowtick - lasttick > 100)
         {
             Packet* packet = new Packet();
-            std::string tmp = "";
-            strncpy(packet->chat, tmp.c_str(), sizeof(packet->chat));
+            strncpy(packet->chat, GameVariables::getChatmessage().c_str(), sizeof(packet->chat));
             packet->id = player->getSs()->getId();
             packet->x = player->getSs()->getX();
             packet->y = player->getSs()->getY();
@@ -193,6 +193,11 @@ void Network::loop()
 
         while(!receivelist.empty())
         {
+            std::string chattmp = receivelist.front()->chat;
+            if(chattmp.size() > 0)
+            {
+                GameVariables::chat.push_back(receivelist.front()->chat);
+            }
             bool newship = true;
             for(unsigned int i = 0;i<spaceschips.size();i++)
             {

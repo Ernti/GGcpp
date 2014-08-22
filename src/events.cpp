@@ -3,6 +3,7 @@
 Events::Events()
 {
     movecam = false;
+    chatActive = false;
     shift = false;
 }
 
@@ -24,9 +25,16 @@ void Events::eventLoop()
         {
             GameVariables::running = false;
         }
+        else if(event.type == SDL_TEXTINPUT)
+        {
+            if(GameVariables::chatinput.size() < 15)
+            {
+                GameVariables::chatinput += event.text.text;
+            }
+        }
         else if(event.type == SDL_KEYDOWN)
         {
-            if(event.key.keysym.scancode == SDL_SCANCODE_SPACE)
+            if(event.key.keysym.sym == SDLK_SPACE)
             {
                 if(player->locked())
                 {
@@ -38,7 +46,28 @@ void Events::eventLoop()
                 }
 
             }
-            else if(event.key.keysym.scancode == SDL_SCANCODE_LSHIFT)
+            else if(event.key.keysym.sym == SDLK_RETURN || event.key.keysym.sym == SDLK_RETURN2)
+            {
+                if(GameVariables::chatActive)
+                {
+                    SDL_StopTextInput();
+                    GameVariables::setChatmessage();
+                    GameVariables::chatActive = false;
+                }
+                else
+                {
+                    SDL_StartTextInput();
+                    GameVariables::chatActive = true;
+                }
+            }
+            else if(event.key.keysym.sym == SDLK_BACKSPACE)
+            {
+                if(GameVariables::chatinput.size() > 0)
+                {
+                    GameVariables::chatinput.pop_back();
+                }
+            }
+            else if(event.key.keysym.sym == SDLK_LSHIFT)
             {
                 shift = true;
             }

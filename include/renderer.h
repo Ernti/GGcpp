@@ -3,7 +3,9 @@
 
 #include <SDL.h>
 #include "SDL_image.h"
+#include "SDL_ttf.h"
 #include <vector>
+#include <cstring>
 #include "player.h"
 #include "gamevariables.h"
 #include "renderable.h"
@@ -26,6 +28,9 @@ class Renderer
         int screenShiftY;
         Player* player;
         std::vector<Renderable*> renderlist;
+        TTF_Font *font;
+        Uint32 chatblinktick;
+        bool chatblink;
 };
 
 #endif // RENDERER_H

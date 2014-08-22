@@ -13,7 +13,6 @@ Movement::~Movement()
 void Movement::subscribe(std::function<bool()> callback)
 {
     movelist.push_back(callback);
-    std::cout << "move!" << std::endl;
 }
 
 void Movement::loop()
