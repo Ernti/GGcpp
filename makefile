@@ -1,6 +1,6 @@
 CC=g++
 CFLAGS=-c -Wall -std=c++11 `sdl2-config --cflags` -I./include
-LDFLAGS=`sdl2-config --libs` -lSDL2_net -lSDL2_image -lGL -lGLU -lGLEW
+LDFLAGS=`sdl2-config --libs` -lSDL2_net -lSDL2_image -lSDL2_ttf
 OBJDIR=obj
 BINDIR=bin
 

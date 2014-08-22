@@ -59,8 +59,8 @@ Network::Network(Packet * returnPacket)
             }
         }
 
-        receiverthread = thread(receiver, this);
-        senderthread = thread(sender, this);
+        receiverthread = thread(&Network::receiver, this);
+        senderthread = thread(&Network::sender, this);
     }
 }
 
