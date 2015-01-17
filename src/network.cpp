@@ -196,7 +196,10 @@ void Network::loop()
             std::string chattmp = receivelist.front()->chat;
             if(chattmp.size() > 0)
             {
-                GameVariables::chat.push_back(receivelist.front()->chat);
+                std::string chatline = "";
+                chatline.append(": ");
+                chatline.append(chattmp);
+                GameVariables::chat.push_back(chatline);
             }
             bool newship = true;
             for(unsigned int i = 0;i<spaceschips.size();i++)

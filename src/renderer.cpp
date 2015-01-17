@@ -9,13 +9,31 @@ Renderer::Renderer()
     screenShiftY = GameVariables::screenResY / 2;
 
     texturizer = new Texturizer(screen);
+    userinterface = new UserInterface(screen);
 
-    font = TTF_OpenFont("gfx/fonts/arial.ttf", 16);
+    Window* testwindow = new Window();
+    testwindow->getRect()->x = 20;
+    testwindow->getRect()->y = 40;
+    testwindow->getRect()->w = 200;
+    testwindow->getRect()->h = 400;
+    WindowBox* testbox = new WindowBox();
+    testbox->getRect()->x = 10;
+    testbox->getRect()->y = 10;
+    testbox->getRect()->w = 180;
+    testbox->getRect()->h = 380;
+    WindowText* testtext = new WindowText();
+    testtext->getRect()->x = 10;
+    testtext->getRect()->y = 10;
+    testtext->getRect()->w = 160;
+    testtext->getRect()->h = 20;
+    testbox->texts.push_back(testtext);
+    testwindow->boxes.push_back(testbox);
+    //userinterface->windows.push_back(testwindow);
 }
 
 Renderer::~Renderer()
 {
-    TTF_CloseFont(font);
+    //dtor
 }
 
 void Renderer::addPlayer(Player* playerin)
@@ -84,120 +102,7 @@ void Renderer::render()
     SDL_RenderCopyEx(screen, texturizer->loadTexture(renderable->getTex()), NULL, &posrect, renderable->getR(), &center, SDL_FLIP_NONE);
     */
 
-    int chatsize = GameVariables::chat.size();
-    for(int it = 0; it < chatsize; it++)
-    {
-        if(it > chatsize - 5)
-        {
-            SDL_Color color={255,255,255};
-            SDL_Surface *text_surface;
-            char chatchar[16];
-            strncpy(chatchar, GameVariables::chat[it].c_str(), sizeof(chatchar));
-            if(!(text_surface=TTF_RenderText_Solid(font,chatchar,color)))
-            {
-                std::cout << TTF_GetError() << std::endl;
-            //handle error here, perhaps print TTF_GetError at least
-            }
-            else
-            {
-                SDL_Texture * text_texture = SDL_CreateTextureFromSurface(screen, text_surface);
-                int w, h;
-                SDL_QueryTexture(text_texture, NULL, NULL, &w, &h);
-
-                SDL_Rect chatrect;
-                chatrect.x = 10;
-                chatrect.y = GameVariables::screenResY - 30 - (chatsize - it) * h;
-                chatrect.h = h;
-                chatrect.w = w;
-
-                SDL_RenderCopy(screen, text_texture, NULL, &chatrect);
-                //perhaps we can reuse it, but I assume not for simplicity.
-                SDL_FreeSurface(text_surface);
-                SDL_DestroyTexture(text_texture);
-            }
-        }
-    }
-
-    if(GameVariables::chatinput.size() > 0)
-    {
-        SDL_Color color={255,255,255};
-        SDL_Surface *text_surface;
-        char chatchar[16];
-        strncpy(chatchar, GameVariables::chatinput.c_str(), sizeof(chatchar));
-        if(!(text_surface=TTF_RenderText_Solid(font,chatchar,color)))
-        {
-            std::cout << TTF_GetError() << std::endl;
-        //handle error here, perhaps print TTF_GetError at least
-        }
-        else
-        {
-            SDL_Texture * text_texture = SDL_CreateTextureFromSurface(screen, text_surface);
-            int w, h;
-            SDL_QueryTexture(text_texture, NULL, NULL, &w, &h);
-
-            SDL_Rect chatrect;
-            chatrect.x = 10;
-            chatrect.y = GameVariables::screenResY - 30;
-            chatrect.h = h;
-            chatrect.w = w;
-
-            SDL_RenderCopy(screen, text_texture, NULL, &chatrect);
-            //perhaps we can reuse it, but I assume not for simplicity.
-            SDL_FreeSurface(text_surface);
-            SDL_DestroyTexture(text_texture);
-        }
-    }
-
-    if(GameVariables::chatActive)
-    {
-        if(SDL_GetTicks() > chatblinktick + 500)
-        {
-            if(chatblink)
-            {
-                chatblink = false;
-            }
-            else
-            {
-                chatblink = true;
-            }
-            chatblinktick = SDL_GetTicks();
-        }
-        SDL_Color color;
-        if(chatblink)
-        {
-            color={0,0,0};
-        }
-        else
-        {
-            color={255,255,255};
-        }
-        SDL_Surface *text_surface;
-        if(!(text_surface=TTF_RenderText_Solid(font,"|",color)))
-        {
-            std::cout << TTF_GetError() << std::endl;
-        //handle error here, perhaps print TTF_GetError at least
-        }
-        else
-        {
-            SDL_Texture * text_texture = SDL_CreateTextureFromSurface(screen, text_surface);
-            int w, h, chatw, chath;
-            char chatchar[16];
-            strncpy(chatchar, GameVariables::chatinput.c_str(), sizeof(chatchar));
-            TTF_SizeText(font, chatchar, &chatw, &chath);
-            SDL_QueryTexture(text_texture, NULL, NULL, &w, &h);
-
-            SDL_Rect chatrect;
-            chatrect.x = 10 + chatw;
-            chatrect.y = GameVariables::screenResY - 30;
-            chatrect.h = h;
-            chatrect.w = w;
-
-            SDL_RenderCopy(screen, text_texture, NULL, &chatrect);
-            //perhaps we can reuse it, but I assume not for simplicity.
-            SDL_FreeSurface(text_surface);
-            SDL_DestroyTexture(text_texture);
-        }
-    }
+    userinterface->render();
 
     SDL_RenderPresent(screen);
 }
